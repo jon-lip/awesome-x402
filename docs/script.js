@@ -117,13 +117,21 @@ function postProcessReadmeContent(container) {
         });
     });
     
-    // Add click tracking for anchor links
+    // Convert anchor links to GitHub repository links
     const anchorLinks = container.querySelectorAll('a[href^="#"]');
     anchorLinks.forEach(link => {
+        const anchor = link.getAttribute('href');
+        // Convert local anchor links to GitHub repository links
+        const githubUrl = `https://github.com/xpaysh/awesome-x402?tab=readme-ov-file${anchor}`;
+        link.setAttribute('href', githubUrl);
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener noreferrer');
+        
         link.addEventListener('click', (e) => {
             gtmPush({
                 'event': 'anchor_link_click',
-                'anchor_target': link.href.split('#')[1]
+                'anchor_target': anchor.split('#')[1],
+                'github_url': githubUrl
             });
         });
     });
